@@ -4,14 +4,28 @@ export default function Landing() {
   const [index, setIndex] = useState(0);
 
   const contentRef = useRef<HTMLDivElement>(null);
-  const menulistRef = useRef<HTMLDivElement>(null);
+  const menulistRef = useRef<HTMLUListElement>(null);
 
+  /* handle height of content */
   useEffect(() => {
-    if (menulistRef.current && contentRef.current) {
-      contentRef.current.style.height = menulistRef.current.offsetHeight + "px";
-    }
+    const menulist = menulistRef.current;
+    const content = contentRef.current;
+
+    const updateContentHeight = () => {
+      if (menulist && content) {
+        content.style.height = menulist.offsetHeight + "px";
+      }
+    };
+
+    updateContentHeight();
+    window.addEventListener("resize", updateContentHeight);
+
+    return () => {
+      window.removeEventListener("resize", updateContentHeight);
+    };
   }, []);
 
+  /* handle scrolling */
   useEffect(() => {
     const content = contentRef.current;
 
@@ -35,6 +49,7 @@ export default function Landing() {
     };
   }, []);
 
+  /* update state based on what content is visible */
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -80,8 +95,8 @@ export default function Landing() {
         ))}
       </div>
 
-      <nav ref={menulistRef}>
-        <ul className="flex flex-col gap-2">
+      <nav>
+        <ul ref={menulistRef} className="flex flex-col gap-2">
           {items.map((item, ...args) => (
             <li key={item.label}>
               <button
