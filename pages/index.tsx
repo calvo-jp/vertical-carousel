@@ -22,8 +22,8 @@ export default function Landing() {
 
       const top =
         e.deltaY > 1
-          ? content.scrollTop + content.clientHeight
-          : content.scrollTop - content.clientHeight;
+          ? content.scrollTop + content.offsetHeight
+          : content.scrollTop - content.offsetHeight;
 
       content.scrollTo({ top });
     };
@@ -88,7 +88,7 @@ export default function Landing() {
                 className="border data-[selected]:border-purple-300 transition-all duration-300 border-neutral-300 px-5 py-2 rounded-md"
                 onClick={() => {
                   if (!contentRef.current) return;
-                  const top = contentRef.current.clientHeight * args[0];
+                  const top = contentRef.current.offsetHeight * args[0];
                   contentRef.current.scrollTo({ top });
                   setIndex(args[0]);
                 }}
